@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="imgs/favicon-32.png">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Commander — Modu Gear</title>
+<meta name="description" content="Finalise ta commande : nom, téléphone, wilaya, adresse. Paiement à la livraison partout en Algérie.">
+<meta name="robots" content="noindex">
+<style>
+  :root{--bg:#0b0f19;--ink:#0f172a;--line:#e2e8f0;--vert:#22c55e;--gris:#64748b}
+  *{box-sizing:border-box}
+  body{margin:0;background:#f4f6fa;color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{background:var(--bg);color:#fff}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px}
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:10px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  .brand .dot{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#22c55e,#0ea5e9);font-size:18px}
+  .brand small{display:block;font-weight:500;font-size:12px;color:#9fb0c9}
+  .retour{color:#c9d6ea;text-decoration:none;font-size:14px;font-weight:600}
+  h1{font-size:26px;margin:22px 0 4px}
+  .sub{color:var(--gris);margin:0 0 20px;font-size:15px}
+  .carte{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+  .ligne{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eef2f7}
+  .ligne:last-child{border-bottom:0}
+  .ligne img{width:64px;height:64px;object-fit:cover;border-radius:10px;background:#eef2f7;flex:none}
+  .ligne .nom{flex:1;font-weight:600;font-size:14.5px;line-height:1.35}
+  .ligne .prix{font-weight:800;white-space:nowrap;font-size:14.5px}
+  .qte{display:flex;align-items:center;gap:6px}
+  .qte button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#f8fafc;font-size:16px;font-weight:700;cursor:pointer}
+  .qte span{min-width:18px;text-align:center;font-weight:700}
+  .sup{border:0;background:transparent;color:#ef4444;font-size:18px;cursor:pointer;line-height:1}
+  .tot{display:flex;justify-content:space-between;font-size:18px;font-weight:800;padding-top:12px;margin-top:6px;border-top:2px solid #eef2f7}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--gris);font-weight:700;margin:12px 0 5px}
+  input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:2px solid #86efac;border-color:#22c55e}
+  .duo{display:flex;gap:10px}
+  .duo>div{flex:1}
+  .cta{display:block;width:100%;margin:18px 0 8px;padding:16px;border:0;border-radius:12px;background:var(--vert);color:#04211f;font:800 17px inherit;cursor:pointer}
+  .cta:disabled{opacity:.6;cursor:not-allowed}
+  .note{font-size:12.5px;color:var(--gris);text-align:center;margin:0 0 24px}
+  .err{color:#dc2626;font-size:13px;margin:6px 0 0;font-weight:600}
+  .vide{text-align:center;padding:30px 10px;color:var(--gris)}
+  .vide a{color:#0ea5e9;font-weight:700}
+  .rassurance{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 0 18px;font-size:12px;color:#475569}
+  .rassurance span{background:#e8eef7;border-radius:999px;padding:5px 10px}
+</style>
+
+<style>
+  :root{--bg:#0c0c0c;--ink:#f4f4f5;--line:rgba(255,255,255,.10);--vert:#ff7a18;--gris:#a1a1aa;
+        --bleu:#4169e1}
+  body{background:#141414;color:#f4f4f5}
+  header{background:#0c0c0c;border-bottom:1px solid rgba(255,255,255,.08);
+    box-shadow:0 1px 0 rgba(65,105,225,.28)}
+  .brand{color:#fff}
+  .brand .logo{height:46px;width:auto;max-width:220px;object-fit:contain;display:block;
+    filter:drop-shadow(0 2px 10px rgba(65,105,225,.35))}
+  .brand small{color:#9c9ca6;letter-spacing:.08em;text-transform:uppercase;font-size:11px}
+  .retour{color:#c6d2ee}
+  .sub{color:#9a9aa2}
+  .carte{background:#1b1b1b;border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 1px 2px rgba(0,0,0,.55),0 10px 30px rgba(0,0,0,.40)}
+  .ligne{border-bottom:1px solid rgba(255,255,255,.07)}
+  .ligne img{background:#f4f4f5}
+  .ligne .prix{color:#ff8a33}
+  .qte button{background:#242424;border:1px solid rgba(255,255,255,.14);color:#f4f4f5}
+  .tot{border-top:2px solid rgba(255,255,255,.10)}
+  .sup{color:#ff8a8a}
+  label{color:#9a9aa2}
+  input,select,textarea{background:#141414;border:1px solid rgba(255,255,255,.14);color:#f4f4f5}
+  input::placeholder,textarea::placeholder{color:#6f6f78}
+  input:focus,select:focus,textarea:focus{outline:2px solid #4f74ff;border-color:#4169e1}
+  option{background:#141414;color:#f4f4f5}
+  .cta{background:linear-gradient(180deg,#ff9d40 0%,#ff7a18 58%,#df5f00 100%);color:#1b0e00;
+    text-shadow:0 1px 0 rgba(255,255,255,.3);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 0 rgba(0,0,0,.16),
+      0 3px 0 #a94600,0 8px 18px rgba(223,95,0,.32)}
+  .cta:hover{filter:brightness(1.06)}
+  .note{color:#9a9aa2}
+  .vide{color:#a5a5ae} .vide a{color:#93aaff}
+  .rassurance{color:#a5a5ae}
+  .rassurance span{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09)}
+  .err{color:#ff8a8a}
+  h1{color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <div class="brand"><img class="logo" src="imgs/logo.png" alt="Modu Gear"><span>Modu Gear<small>Stands manettes 3D</small></span></div>
+    <a class="retour" href="index.html">← Catalogue</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Finalise ta commande</h1>
+  <p class="sub">Paiement à la livraison. On t'appelle pour confirmer avant l'expédition.</p>
+
+  <div class="rassurance">
+    <span>🚚 Livraison 58 wilayas</span>
+    <span>💵 Paiement à la réception</span>
+    <span>🛡️ Qualité garantie</span>
+  </div>
+
+  <div class="carte" id="recap"><div class="vide">Chargement du panier…</div></div>
+
+  <form class="carte" id="form" novalidate>
+    <label for="nom">Nom et prénom *</label>
+    <input id="nom" name="nom" type="text" autocomplete="name" placeholder="Ex : Karim Benali">
+
+    <label for="tel">Téléphone *</label>
+    <input id="tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="05 XX XX XX XX">
+
+    <div class="duo">
+      <div>
+        <label for="wilaya">Wilaya *</label>
+        <select id="wilaya" name="wilaya"><option value="">— choisir —</option></select>
+      </div>
+      <div>
+        <label for="commune">Commune</label>
+        <input id="commune" name="commune" type="text" placeholder="Ex : Bab Ezzouar">
+      </div>
+    </div>
+
+    <label for="adresse">Adresse (rue, quartier, repère) *</label>
+    <input id="adresse" name="adresse" type="text" placeholder="Ex : Cité 500 logements, bâti B, près de la mosquée">
+
+    <label for="note">Remarque (facultatif)</label>
+    <textarea id="note" name="note" rows="2" placeholder="Couleur souhaitée, horaire d'appel…"></textarea>
+
+    <button class="cta" type="submit" id="envoyer">Confirmer sur WhatsApp</button>
+    <p class="note">Aucun paiement en ligne. Tu payes le livreur à la réception.</p>
+    <p class="err" id="erreur" style="display:none"></p>
+  </form>
+</main>
+
+<script>
+var WA = "213780078678";
+var WILAYAS = ["01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum El Bouaghi","05 - Batna","06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouira","11 - Tamanrasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou","16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda","21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine","26 - Médéa","27 - Mostaganem","28 - M'Sila","29 - Mascara","30 - Ouargla","31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arreridj","35 - Boumerdès","36 - El Tarf","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela","41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma","46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane","49 - Timimoun","50 - Bordj Badji Mokhtar","51 - Ouled Djellal","52 - Béni Abbès","53 - In Salah","54 - In Guezzam","55 - Touggourt","56 - Djanet","57 - El M'Ghair","58 - El Meniaa"];
+var CLE = "ga_panier_v1";
+var panier = [];
+
+function lire(){ try { return JSON.parse(localStorage.getItem(CLE)) || []; } catch(e){ return []; } }
+function ecrire(p){ try { localStorage.setItem(CLE, JSON.stringify(p)); } catch(e){} }
+function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " Da"; }
+function total(){ return panier.reduce(function(n,a){ return n + (a.prix||0)*(a.qte||1); }, 0); }
+
+function rendre(){
+  var zone = document.getElementById("recap");
+  if (!panier.length){
+    zone.innerHTML = '<div class="vide">Ton panier est vide.<br><a href="index.html#catalogue">Voir le catalogue</a></div>';
+    document.getElementById("envoyer").disabled = true;
+    return;
+  }
+  document.getElementById("envoyer").disabled = false;
+  var html = panier.map(function(a, i){
+    return '<div class="ligne">' +
+      '<img src="' + a.img + '" alt="">' +
+      '<div class="nom">' + a.nom + '<br><span style="font-weight:500;color:#9a9aa2;font-size:12.5px">' +
+        (a.ref ? a.ref + ' · ' : '') + fmt(a.prix) + ' / pièce</span></div>' +
+      '<div class="qte"><button type="button" onclick="bouger(' + i + ',-1)">−</button><span>' + a.qte + '</span>' +
+      '<button type="button" onclick="bouger(' + i + ',1)">+</button></div>' +
+      '<div class="prix">' + fmt(a.prix * a.qte) + '</div>' +
+      '<button class="sup" type="button" title="Retirer" onclick="retirer(' + i + ')">✕</button>' +
+    '</div>';
+  }).join("");
+  html += '<div class="tot"><span>Total</span><span>' + fmt(total()) + '</span></div>';
+  zone.innerHTML = html;
+}
+function bouger(i, d){ panier[i].qte = Math.max(1, (panier[i].qte||1) + d); ecrire(panier); rendre(); }
+function retirer(i){ panier.splice(i,1); ecrire(panier); rendre(); }
+
+function message(){
+  var l = ["Bonjour Modu Gear, je veux commander :", ""];
+  panier.forEach(function(a){
+    l.push("• " + a.qte + " × " + a.nom + (a.ref ? " [" + a.ref + "]" : "") + " — " + fmt(a.prix * a.qte));
+  });
+  l.push("", "TOTAL : " + fmt(total()), "");
+  l.push("Nom : " + document.getElementById("nom").value.trim());
+  l.push("Téléphone : " + document.getElementById("tel").value.trim());
+  l.push("Wilaya : " + document.getElementById("wilaya").value);
+  var c = document.getElementById("commune").value.trim();
+  if (c) l.push("Commune : " + c);
+  l.push("Adresse : " + document.getElementById("adresse").value.trim());
+  var n = document.getElementById("note").value.trim();
+  if (n) l.push("Remarque : " + n);
+  l.push("", "Paiement à la livraison. Merci de m'appeler pour confirmer.");
+  return l.join("\n");
+}
+
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+  var err = document.getElementById("erreur");
+  err.style.display = "none";
+  var nom = document.getElementById("nom").value.trim();
+  var tel = document.getElementById("tel").value.replace(/[^\d+]/g, "");
+  var wil = document.getElementById("wilaya").value;
+  var adr = document.getElementById("adresse").value.trim();
+  function stop(m){ err.textContent = m; err.style.display = "block"; }
+  if (!panier.length) return stop("Ton panier est vide.");
+  if (nom.length < 3) return stop("Indique ton nom et prénom.");
+  if (!/^0\d{8,9}$/.test(tel)) return stop("Numéro de téléphone invalide (ex : 0551234567).");
+  if (!wil) return stop("Choisis ta wilaya.");
+  if (adr.length < 5) return stop("Indique une adresse précise (rue, quartier, repère).");
+
+  var commande = { articles: panier, total: total(), nom: nom, tel: tel, wilaya: wil,
+                   commune: document.getElementById("commune").value.trim(), adresse: adr,
+                   note: document.getElementById("note").value.trim(),
+                   date: new Date().toISOString(), page: location.href };
+
+  /* sauvegarde locale immédiate (filet de sécurité si le client ferme WhatsApp) */
+  try {
+    var l = JSON.parse(localStorage.getItem("ga_commandes") || "[]");
+    l.push(commande); localStorage.setItem("ga_commandes", JSON.stringify(l));
+  } catch(e){}
+
+  
+  window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(message()), "_blank");
+  document.getElementById("envoyer").textContent = "✅ Commande envoyée — vérifie WhatsApp";
+});
+
+(function init(){
+  var sel = document.getElementById("wilaya");
+  WILAYAS.forEach(function(w){ var o = document.createElement("option"); o.value = w; o.textContent = w; sel.appendChild(o); });
+  panier = lire();
+  if (panier.length === 1 && window.innerWidth < 500) {} /* rien */
+  rendre();
+})();
+</script>
+</body>
+</html>
